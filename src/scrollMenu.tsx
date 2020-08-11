@@ -811,15 +811,49 @@ export class ScrollMenu extends React.Component<MenuProps, MenuState> {
   /** mouse wheel handler */
   // TODO: gestureEvents
   public handleWheel = (e: WheelEvent): Void => {
-    const { wheel } = this.props;
-    if (!wheel) {
+    // tslint:disable-next-line:no-console
+    // console.log('wheel event', e);
+    // tslint:disable-next-line:no-console
+    // console.log('delta y', e.deltaY);
+    // tslint:disable-next-line:no-console
+    // console.log('delta x', e.deltaX);
+    const { wheel, trackpadScrolling } = this.props;
+    if (wheel) {
+      if (e.deltaY < 0) {
+        this.handleArrowClick();
+      } else {
+        this.handleArrowClick(false);
+      }
+    }
+
+    if (trackpadScrolling) { // && this.getOffsetAtStart()) {
+      this.handleHorizontalScroll(e.deltaX);
+    }
+  }
+
+  public handleHorizontalScroll = (deltaX: number) => {
+    // tslint:disable-next-line:no-console
+    // console.log('we scrollin!');
+    const { alignCenter, rtl } = this.props;
+    const { allItemsWidth, menuWidth } = this;
+    if (!alignCenter && allItemsWidth < menuWidth) {
       return false;
     }
-    if (e.deltaY < 0) {
-      this.handleArrowClick();
-    } else {
-      this.handleArrowClick(false);
+    let result = this.state.translate + deltaX;
+
+    // don't let scroll over start and end
+    if (this.itBeforeStart(result)) {
+      result = result - Math.abs(this.getOffsetAtStart()) / 2;
+    } else if (this.itAfterEnd(result)) {
+      result = result + Math.abs(this.getOffsetAtEnd()) / 2;
     }
+    // tslint:disable-next-line:no-console
+    console.log('offset at start', this.getOffsetAtStart());
+    // tslint:disable-next-line:no-console
+    console.log('offset at end', this.getOffsetAtEnd());
+    this.setState(state => {
+      return {translate: result};
+    });
   }
 
   /** offset at start */
@@ -936,6 +970,8 @@ export class ScrollMenu extends React.Component<MenuProps, MenuState> {
       return false;
     }
     const { translate: startDragTranslate } = this.state;
+    // tslint:disable-next-line:no-console
+    console.log('startDragTranslate', startDragTranslate )
 
     // record drag events
     this.dragHistory = [{ time: Date.now(), position: startDragTranslate }];
@@ -969,6 +1005,9 @@ export class ScrollMenu extends React.Component<MenuProps, MenuState> {
     const diff =
       xPoint === defaultProps.xPoint ? defaultProps.xPoint : xPoint - point;
     let result = translate - (rtl ? -diff : diff);
+
+    // tslint:disable-next-line:no-console
+    console.log('xPoint', xPoint);
 
     // don't let scroll over start and end
     if (this.itBeforeStart(result)) {
@@ -1127,6 +1166,8 @@ export class ScrollMenu extends React.Component<MenuProps, MenuState> {
       disabledClass: arrowDisabledClass,
     };
 
+    // tslint:disable-next-line:no-console
+    // console.log('translate', this.state.translate);
     return (
       <div className={menuClass} style={menuStyles} onWheel={this.handleWheel}>
         {arrowLeft && (

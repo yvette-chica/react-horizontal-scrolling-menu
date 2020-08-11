@@ -28,6 +28,7 @@ interface MenuProps {
   scrollToSelected: boolean;
   scrollBy: number;
   selected: string;
+  trackpadScrolling: boolean;
   translate: number;
   transition: number;
   useButtonRole: boolean;

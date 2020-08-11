@@ -70,6 +70,7 @@ class App extends Component {
     translate: undefined,
     transition: 0.4,
     wheel: true,
+    trackpadScrolling: true,
     showList: true,
     inertiascrolling: false,
     slowdownFactor: 0.25,
@@ -92,12 +93,12 @@ class App extends Component {
   }
 
   onUpdate = ({ translate }) => {
-    console.log(`onUpdate: translate: ${translate}`);
+    // console.log(`onUpdate: translate: ${translate}`);
     this.setState({ translate });
   };
 
   onFirstItemVisible = () => {
-    console.log('first item is visible');
+    // console.log('first item is visible');
   };
 
   onLastItemVisible = () => {
@@ -164,6 +165,7 @@ class App extends Component {
       translate,
       transition,
       wheel,
+      trackpadScrolling,
       showList,
       scrollToSelected,
       inertiascrolling,
@@ -257,6 +259,15 @@ class App extends Component {
               onChange={() =>
                 this.setState({ scrollToSelected: !scrollToSelected })
               }
+            />
+          </label>
+          <label style={checkboxStyle}>
+            Horizontal trackpad scrolling
+            <input
+              name="trackpad"
+              type="checkbox"
+              checked={trackpadScrolling}
+              onChange={() => this.setState({ trackpadScrolling: !trackpadScrolling })}
             />
           </label>
           <label style={checkboxStyle}>

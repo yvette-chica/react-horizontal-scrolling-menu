@@ -89,6 +89,8 @@ const defaultProps: MenuProps = {
   scrollToSelected: false,
   /** selected menu item */
   selected: '',
+  /** scroll with trackpad */
+  trackpadScrolling: true,
   /** animation speed */
   transition: 0.4,
   /** position of elements */
@@ -101,7 +103,7 @@ const defaultProps: MenuProps = {
   wrapperStyle: defaultWrapperStyle,
   /** scroll with mouse wheel */
   // tslint:disable-next-line:object-literal-sort-keys
-  wheel: true,
+  wheel: false,
   /** this not used */
   xPoint: 0,
   /** for rtl languages */
